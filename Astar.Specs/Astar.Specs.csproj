@@ -50,6 +50,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EstimateGSpecs.cs" />
     <Compile Include="FindShortestPathSpecs.cs" />
     <Compile Include="GetAdjacentNodesToSpecs.cs" />
     <Compile Include="IsAvailableSpecs.cs" />

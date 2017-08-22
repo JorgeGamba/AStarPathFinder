@@ -32,6 +32,9 @@ namespace Astar
 
         internal static bool IsAvailable(Predicate<(int, int)> isWalkable, ISet<(int x, int y)> closedList, (int x, int y) node) => 
             isWalkable(node) && !closedList.Contains(node);
+
+        internal static int EstimateG((int x, int y) sourcePoint, (int x, int y) targetPoint) => 
+            Math.Abs(targetPoint.x - sourcePoint.x + targetPoint.y - sourcePoint.y) == 1 ? 10 : 14;
     }
 
     public class FoundSolution : ISearchResult

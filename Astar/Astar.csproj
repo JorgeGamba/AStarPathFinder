@@ -37,7 +37,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FoundSolution.cs" />
     <Compile Include="Functions.cs" />
+    <Compile Include="ISearchResult.cs" />
+    <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

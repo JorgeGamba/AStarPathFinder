@@ -9,7 +9,7 @@ namespace Astar.Specs
     public class FindShortestPathSpecs : FeatureSpecifications
     {
         public override void When() => _exception = Catch.Exception(() =>
-            _result = FindShortestPath(_startingPoint, _destinationPoint, _isWalkableFunc)
+            _result = FindShortestPath(_startingPoint, _destinationPoint, _isWalkableFunc, _estimateHFunc)
         );
 
         public class When_the_starting_point_is_the_same_as_the_target_point : FindShortestPathSpecs
@@ -19,6 +19,7 @@ namespace Astar.Specs
                 _startingPoint = _someStartingPoint;
                 _destinationPoint = _startingPoint;
                 _isWalkableFunc = _anyIsWalkableFunc;
+                _estimateHFunc = _anyEstimateHFunc;
             }
 
             [Test]
@@ -37,6 +38,7 @@ namespace Astar.Specs
                 _startingPoint = _someStartingPoint;
                 _destinationPoint = _startingPoint;
                 _isWalkableFunc = node => false;
+                _estimateHFunc = _anyEstimateHFunc;
             }
 
             [Test]
@@ -55,6 +57,7 @@ namespace Astar.Specs
                 _startingPoint = _someStartingPoint;
                 _destinationPoint = (_startingPoint.x + 1, _startingPoint.y);
                 _isWalkableFunc = _anyIsWalkableFunc;
+                _estimateHFunc = _anyEstimateHFunc;
             }
 
             [Test]
@@ -72,11 +75,13 @@ namespace Astar.Specs
         (int x, int y) _startingPoint;
         (int x, int y) _destinationPoint;
         Predicate<(int, int)> _isWalkableFunc;
+        Func<(int x, int y), (int x, int y), int> _estimateHFunc;
         ISearchResult _result;
         Exception _exception;
 
         static (int, int) _someStartingPoint = (15, 23);
         static (int, int) _someDestinationPoint = (25, 33);
         static Predicate<(int, int)> _anyIsWalkableFunc = node => true;
+        static Func<(int x, int y), (int x, int y), int> _anyEstimateHFunc;
     }
 }

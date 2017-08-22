@@ -50,11 +50,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FindTheCostOfAdjacentMoveSpecs.cs" />
-    <Compile Include="CreateNodeSpecs.cs" />
+    <Compile Include="Node\CreateTheStartingNodeSpecs.cs" />
+    <Compile Include="Node\FindTheCostOfAdjacentMoveSpecs.cs" />
+    <Compile Include="Node\CreateNodeSpecs.cs" />
     <Compile Include="FindShortestPathSpecs.cs" />
-    <Compile Include="GetAdjacentNodesToSpecs.cs" />
+    <Compile Include="Node\GetAdjacentPointsSpecs.cs" />
     <Compile Include="IsAvailableSpecs.cs" />
+    <Compile Include="Node\ObjectMother.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2,14 +2,13 @@
 using System.Linq;
 using NUnit.Framework;
 using Shouldly;
-using static Astar.Functions;
 
-namespace Astar.Specs
+namespace Astar.Specs.Node
 {
-    public class GetAdjacentNodesToSpecs
+    public class GetAdjacentPointsToSpecs
     {
-        public GetAdjacentNodesToSpecs() => 
-            _result = GetAdjacentNodesTo((10, 10));
+        public GetAdjacentPointsToSpecs() => 
+            _result = ObjectMother.CreateSomeNodeWith((10, 10)).GetAdjacentPoints();
 
         [Test]
         public void Should_return_8_items() =>

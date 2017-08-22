@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FindShortestPathSpecs.cs" />
+    <Compile Include="GetAdjacentNodesToSpecs.cs" />
+    <Compile Include="IsAvailableSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

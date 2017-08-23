@@ -11,21 +11,28 @@ namespace Astar
             if (!isWalkable(startingPoint))
                 throw new Exception($"The starting position (x: {startingPoint.x}, y: {startingPoint.y}) it is not a walkable node.");
 
-            var currentNode = Node.CreateTheStartingNodeWith(startingPoint);
-            var openSet = new HashSet<Node> { currentNode };
+            var startingNode = Node.CreateTheStartingNodeWith(startingPoint);
+            var openSet = new HashSet<Node> { startingNode };
             var closedSet = new HashSet<(int x, int y)>();
-            var solution = new List<(int x, int y)>() {startingPoint};
-            var availableAdjacentPoints = currentNode.GetAdjacentPoints().Where(node => IsAvailable(isWalkable, closedSet, node)); // TODO: A well candidate for partial application
-            foreach (var adjacentPoint in availableAdjacentPoints)
+            int EstimateHFromFunc((int x, int y) point) => estimateH(point, destinationPoint);
+            while (openSet.Any())
             {
-                if (adjacentPoint.Equals(destinationPoint))
+                var currentNode = openSet.OrderBy(x => x.F).First();
+                if (currentNode.Point.Equals(destinationPoint))
+                    return FoundSolution.CreateSolutionFor(currentNode);
+
+                openSet.Remove(currentNode);
+                closedSet.Add(currentNode.Point);
+
+                var availableAdjacentPoints = startingNode.GetAdjacentPoints().Where(node => IsAvailable(isWalkable, closedSet, node)); // TODO: A well candidate for partial application
+                foreach (var adjacentPoint in availableAdjacentPoints)
                 {
-                    solution.Add(adjacentPoint);
-                    break;
+                    openSet.Add(Node.CreateNodeWith(EstimateHFromFunc, currentNode, adjacentPoint));
                 }
+                
             }
 
-            return new FoundSolution(solution);
+            return new NotFoundSolution();
         }
         
 

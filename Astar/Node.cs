@@ -5,12 +5,13 @@ namespace Astar
 {
     public class Node
     {
-        private Node((int, int) point, int g, int h, int f)
+        private Node((int, int) point, int g, int h, int f, Node parent)
         {
             Point = point;
             G = g;
             H = h;
             F = f;
+            Parent = parent;
         }
 
         public (int x, int y) Point { get; }
@@ -20,6 +21,8 @@ namespace Astar
         public int H { get; }
 
         public int F { get; }
+
+        public Node Parent { get; }
 
         public IEnumerable<(int x, int y)> GetAdjacentPoints() =>
             new[]
@@ -44,10 +47,10 @@ namespace Astar
             var h = estimateHFrom(point);
             var f = g + h;
 
-            return new Node(point, g, h, f);
+            return new Node(point, g, h, f, parent);
         }
 
         public static Node CreateTheStartingNodeWith((int x, int y) point) => 
-            new Node(point, 0, 0, 0);
+            new Node(point, 0, 0, 0, null);
     }
 }

@@ -30,6 +30,10 @@ namespace Astar.Specs.Node
         public void Should_have_a_f_cost_equal_to_the_sum_of_g_and_h() =>
             _result.F.ShouldBe(_result.G + _result.H);
 
+        [Test]
+        public void Should_have_the_parent_provided() =>
+            _result.Parent.ShouldBe(_parent);
+
         Astar.Node _parent;
         (int x, int y) _point;
         Astar.Node _result;

@@ -50,14 +50,14 @@ namespace Astar.Specs
                 _exception.Message.ShouldBe($"The starting position (x: {_startingPoint.x}, y: {_startingPoint.y}) it is not a walkable node.");
         }
 
-        public class When_the_destination_point_is_right_to_the_starting_point : FindShortestPathSpecs
+        public class When_the_destination_point_is_in_the_first_set_of_adjacent_points : FindShortestPathSpecs
         {
             public override void Given()
             {
                 _startingPoint = _someStartingPoint;
                 _destinationPoint = (_startingPoint.x + 1, _startingPoint.y);
                 _isWalkableFunc = _anyIsWalkableFunc;
-                _estimateHFunc = _anyEstimateHFunc;
+                _estimateHFunc = (point, destinationPoint) => point.Equals(destinationPoint) ? 1 : 2;
             }
 
             [Test]
@@ -67,6 +67,21 @@ namespace Astar.Specs
             [Test]
             public void Should_return_only_the_starting_point_as_the_solution() =>
                 ((FoundSolution)_result).Value.ShouldBe(new[] { _startingPoint, _destinationPoint });
+        }
+
+        public class When_there_is_no_way_to_reach_the_destination_point : FindShortestPathSpecs
+        {
+            public override void Given()
+            {
+                _startingPoint = _someStartingPoint;
+                _destinationPoint = (_startingPoint.x + 2, _startingPoint.y + 2);
+                _isWalkableFunc = point => false;
+                _estimateHFunc = _anyEstimateHFunc;
+            }
+
+            [Test]
+            public void Should_return_a_not_found_result() =>
+                _result.ShouldBeOfType<NotFoundSolution>();
         }
 
 

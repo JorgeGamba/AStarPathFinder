@@ -8,10 +8,9 @@ namespace Astar.Specs.Node
     {
         public CreateNodeSpecs()
         {
-            int EstimateHFunc((int x, int y) anyStartingPoint) => _someHCost;
             _parent = CreateTheStartingNodeWith((10, 10));
             _point = (11, 11);
-            _result = CreateNodeWith(EstimateHFunc, _parent, _point);
+            _result = CreateNodeWith(_parent, _point, _someHCost);
         }
 
         [Test]

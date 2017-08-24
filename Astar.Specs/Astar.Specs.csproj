@@ -58,6 +58,7 @@
     <Compile Include="Node\GetAdjacentPointsSpecs.cs" />
     <Compile Include="IsAvailableSpecs.cs" />
     <Compile Include="Node\ObjectMother.cs" />
+    <Compile Include="Node\UpdateSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

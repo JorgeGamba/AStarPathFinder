@@ -31,7 +31,7 @@ namespace Astar.Specs
             public override void Given()
             {
                 var parentNode = Astar.Node.CreateTheStartingNodeWith(_someStartingPoint);
-                _node = Astar.Node.CreateNodeWith(_someEstimateHFrom, parentNode, _someDestinationPoint);
+                _node = Astar.Node.CreateNodeWith(parentNode, _someDestinationPoint, _someEstimatedH);
             }
 
             [Test]
@@ -52,8 +52,8 @@ namespace Astar.Specs
             public override void Given()
             {
                 var startingNode = Astar.Node.CreateTheStartingNodeWith(_someStartingPoint);
-                var middleNode = Astar.Node.CreateNodeWith(_someEstimateHFrom, startingNode, _someMiddlePoint);
-                _node = Astar.Node.CreateNodeWith(_someEstimateHFrom, middleNode, _someDestinationPoint);
+                var middleNode = Astar.Node.CreateNodeWith(startingNode, _someMiddlePoint, _someEstimatedH);
+                _node = Astar.Node.CreateNodeWith(middleNode, _someDestinationPoint, _someEstimatedH);
             }
 
             [Test]
@@ -79,7 +79,7 @@ namespace Astar.Specs
         Astar.Node _node;
         FoundSolution _result;
 
-        static Func<(int x, int y), int> _someEstimateHFrom = point => 1;
+        static int _someEstimatedH = 1;
         static (int, int) _someStartingPoint = (10, 10);
         static (int, int) _someDestinationPoint = (11, 10);
     }

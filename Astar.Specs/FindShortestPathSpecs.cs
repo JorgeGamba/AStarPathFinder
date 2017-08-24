@@ -18,7 +18,7 @@ namespace Astar.Specs
             {
                 _startingPoint = _someStartingPoint;
                 _destinationPoint = _startingPoint;
-                _isWalkableFunc = _anyIsWalkableFunc;
+                _isWalkableFunc = _allIsWalkableFunc;
                 _estimateHFunc = _anyEstimateHFunc;
             }
 
@@ -50,25 +50,6 @@ namespace Astar.Specs
                 _exception.Message.ShouldBe($"The starting position (x: {_startingPoint.x}, y: {_startingPoint.y}) it is not a walkable node.");
         }
 
-        public class When_the_destination_point_is_in_the_first_set_of_adjacent_points : FindShortestPathSpecs
-        {
-            public override void Given()
-            {
-                _startingPoint = _someStartingPoint;
-                _destinationPoint = (_startingPoint.x + 1, _startingPoint.y);
-                _isWalkableFunc = _anyIsWalkableFunc;
-                _estimateHFunc = (point, destinationPoint) => point.Equals(destinationPoint) ? 1 : 2;
-            }
-
-            [Test]
-            public void Should_return_a_positive_result() =>
-                _result.ShouldBeOfType<FoundSolution>();
-
-            [Test]
-            public void Should_return_only_the_starting_point_as_the_solution() =>
-                ((FoundSolution)_result).Value.ShouldBe(new[] { _startingPoint, _destinationPoint });
-        }
-
         public class When_there_is_no_way_to_reach_the_destination_point : FindShortestPathSpecs
         {
             public override void Given()
@@ -84,6 +65,44 @@ namespace Astar.Specs
                 _result.ShouldBeOfType<NotFoundSolution>();
         }
 
+        public class When_the_destination_point_is_in_the_first_set_of_adjacent_points : FindShortestPathSpecs
+        {
+            public override void Given()
+            {
+                _startingPoint = _someStartingPoint;
+                _destinationPoint = (_startingPoint.x + 1, _startingPoint.y);
+                _isWalkableFunc = _allIsWalkableFunc;
+                _estimateHFunc = (point, destinationPoint) => point.Equals(destinationPoint) ? 1 : 2;
+            }
+
+            [Test]
+            public void Should_return_a_positive_result() =>
+                _result.ShouldBeOfType<FoundSolution>();
+
+            [Test]
+            public void Should_return_only_the_starting_point_as_the_solution() =>
+                ((FoundSolution)_result).Value.ShouldBe(new[] { _startingPoint, _destinationPoint });
+        }
+
+        public class When_the_destination_point_is_not_in_the_first_set_of_adjacent_points : FindShortestPathSpecs
+        {
+            public override void Given()
+            {
+                _startingPoint = _someStartingPoint;
+                _destinationPoint = (_startingPoint.x + 2, _startingPoint.y);
+                _isWalkableFunc = _allIsWalkableFunc;
+                _estimateHFunc = (point, destinationPoint) => point.Equals(destinationPoint) ? 1 : 20;
+            }
+
+            [Test]
+            public void Should_return_a_positive_result() =>
+                _result.ShouldBeOfType<FoundSolution>();
+
+            [Test]
+            public void Should_return_only_the_starting_point_as_the_solution() =>
+                ((FoundSolution)_result).Value.ShouldBe(new[] { _startingPoint, _destinationPoint });
+        }
+
 
 
 
@@ -96,7 +115,7 @@ namespace Astar.Specs
 
         static (int, int) _someStartingPoint = (15, 23);
         static (int, int) _someDestinationPoint = (25, 33);
-        static Predicate<(int, int)> _anyIsWalkableFunc = node => true;
+        static Predicate<(int, int)> _allIsWalkableFunc = node => true;
         static Func<(int x, int y), (int x, int y), int> _anyEstimateHFunc;
     }
 }

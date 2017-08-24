@@ -16,13 +16,13 @@ namespace Astar
 
         public (int x, int y) Point { get; }
 
-        public int G { get; }
+        public int G { get; private set; }
 
         public int H { get; }
 
-        public int F { get; }
+        public int F { get; private set; }
 
-        public Node Parent { get; }
+        public Node Parent { get; private set; }
 
         public IEnumerable<(int x, int y)> GetAdjacentPoints() =>
             new[]
@@ -40,11 +40,21 @@ namespace Astar
         public int FindTheCostOfAdjacentMoveTo((int x, int y) targetPoint) =>
             Math.Abs(targetPoint.x - Point.x + targetPoint.y - Point.y) == 1 ? 10 : 14;
 
+        public void UpdateGiven(Node potentialNewParent)
+        {
+            var potentialNewG = potentialNewParent.G + potentialNewParent.FindTheCostOfAdjacentMoveTo(Point);
+            if (potentialNewG < G)
+            {
+                Parent = potentialNewParent;
+                G = potentialNewG;
+                F = potentialNewG + H;  // TODO: Do refactoring
+            }
+        }
 
-        public static Node CreateNodeWith(Func<(int x, int y), int> estimateHFrom, Node parent, (int x, int y) point)
+
+        public static Node CreateNodeWith(Node parent, (int x, int y) point, int h)
         {
             var g = parent.G + parent.FindTheCostOfAdjacentMoveTo(point);
-            var h = estimateHFrom(point);
             var f = g + h;
 
             return new Node(point, g, h, f, parent);

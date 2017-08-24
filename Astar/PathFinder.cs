@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Astar
 {
-    public static class Functions
+    public static class PathFinder
     {
         public static ISearchResult FindShortestPath((int x, int y) startingPoint, (int x, int y) destinationPoint, Predicate<(int, int)> isWalkable, Func<(int x, int y), (int x, int y), int> estimateH)
         {
@@ -13,38 +13,54 @@ namespace Astar
 
             // Bootstrap
             var startingNode = Node.CreateTheStartingNodeWith(startingPoint);
-            var pointsSortedByF = new SortedList<int, (int, int)> { { startingNode.F, startingPoint } };
             var openSet = new Dictionary<(int, int), Node> { {startingPoint, startingNode } };
             var closedSet = new HashSet<(int x, int y)>();
             int EstimateHFromFor((int x, int y) point) => estimateH(point, destinationPoint);
 
             while (openSet.Any())
             {
-                var currentPoint = pointsSortedByF.First().Value;
-                var currentNode = openSet[currentPoint];
-                if (currentPoint.Equals(destinationPoint))
-                    return FoundSolution.CreateSolutionFor(currentNode);
+                var current = GetCurrentFrom(openSet);
+                if (current.Point.Equals(destinationPoint))
+                    return FoundSolution.CreateSolutionFor(current.Node);
 
-                pointsSortedByF.RemoveAt(0);
-                openSet.Remove(currentPoint);
+                openSet.Remove(current.Point);
 
-                var availableAdjacentPoints = currentNode.GetAdjacentPoints().Where(node => IsAvailable(isWalkable, closedSet, node)); // TODO: A well candidate for partial application
+                var availableAdjacentPoints = current.Node.GetAdjacentPoints().Where(node => IsAvailable(isWalkable, closedSet, node)); // TODO: A well candidate for partial application
                 foreach (var availablePoint in availableAdjacentPoints)
                 {
-                    if (openSet.TryGetValue(currentPoint, out var foundNode))
+                    Node availableNode;
+                    if (openSet.TryGetValue(availablePoint, out availableNode))
                     {
-                        
+                        availableNode.UpdateGiven(current.Node);
                     }
                     else
                     {
                         var h = EstimateHFromFor(availablePoint);
-                        openSet.Add(availablePoint, Node.CreateNodeWith(currentNode, availablePoint, h));
+                        availableNode = Node.CreateNodeWith(current.Node, availablePoint, h);
+                        openSet.Add(availablePoint, availableNode);
                     }
                 }
-                closedSet.Add(currentNode.Point);
+                closedSet.Add(current.Node.Point);
             }
 
             return new NotFoundSolution();
+        }
+
+        internal static ((int x, int y) Point, Node Node) GetCurrentFrom(IDictionary<(int, int), Node> openSet)
+        {
+            var lowestF = int.MaxValue;
+            Node node = null;
+            (int, int) point = (0, 0);
+            foreach (var pair in openSet)
+            {
+                if (pair.Value.F < lowestF)
+                {
+                    node = pair.Value;
+                    point = node.Point;
+                    lowestF = pair.Value.F;
+                }
+            }
+            return (point, node);
         }
         
 

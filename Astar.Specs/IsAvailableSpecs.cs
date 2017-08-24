@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Doing.BDDExtensions;
 using NUnit.Framework;
 using Shouldly;
-using static Astar.Functions;
+using static Astar.PathFinder;
 
 namespace Astar.Specs
 {

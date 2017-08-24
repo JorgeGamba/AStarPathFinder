@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FoundSolution.cs" />
-    <Compile Include="Functions.cs" />
+    <Compile Include="PathFinder.cs" />
     <Compile Include="ISearchResult.cs" />
     <Compile Include="ManhattanMethod.cs" />
     <Compile Include="Node.cs" />

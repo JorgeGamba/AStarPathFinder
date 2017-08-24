@@ -40,7 +40,7 @@ namespace Astar
         public int FindTheCostOfAdjacentMoveTo((int x, int y) targetPoint) =>
             Math.Abs(targetPoint.x - Point.x + targetPoint.y - Point.y) == 1 ? 10 : 14;
 
-        public void UpdateGiven(Node potentialNewParent)
+        public Node UpdateGiven(Node potentialNewParent)
         {
             var potentialNewG = potentialNewParent.G + potentialNewParent.FindTheCostOfAdjacentMoveTo(Point);
             if (potentialNewG < G)
@@ -49,6 +49,8 @@ namespace Astar
                 G = potentialNewG;
                 F = potentialNewG + H;  // TODO: Do refactoring
             }
+
+            return this;
         }
 
 

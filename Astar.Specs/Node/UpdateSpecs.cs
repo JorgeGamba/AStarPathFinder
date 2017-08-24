@@ -15,7 +15,7 @@ namespace Astar.Specs.Node
         }
 
         public override void When() =>
-             _node.UpdateGiven(_potentialNewParent);
+            _result = _node.UpdateGiven(_potentialNewParent);
 
         public class When_the_new_potential_g_is_less_than_the_current : UpdateSpecs
         {
@@ -27,19 +27,19 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_take_the_passed_potential_parent_as_its_new_parent() =>
-                _node.Parent.ShouldBe(_potentialNewParent);
+                _result.Parent.ShouldBe(_potentialNewParent);
 
             [Test]
             public void Should_change_its_g_cost_to_its_parents_g_plus_the_adjacent_move_cost() =>
-                _node.G.ShouldBe(_potentialNewParent.G + 10);
+                _result.G.ShouldBe(_potentialNewParent.G + 10);
 
             [Test]
             public void Should_not_change_its_h_cost() =>
-                _node.H.ShouldBe(_someH);
+                _result.H.ShouldBe(_someH);
 
             [Test]
             public void Should_change_its_f_according_the_new_g() =>
-                _node.F.ShouldBe(_potentialNewParent.G + 10 + _node.H);
+                _result.F.ShouldBe(_potentialNewParent.G + 10 + _result.H);
         }
 
         public class When_the_new_potential_g_is_greater_than_the_current : UpdateSpecs
@@ -52,19 +52,19 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_preserve_its_former_parent() =>
-                _node.Parent.ShouldBe(_nodeWithTheLowestG);
+                _result.Parent.ShouldBe(_nodeWithTheLowestG);
 
             [Test]
             public void Should_preserve_its_former_g_cost() =>
-                _node.G.ShouldBe(_nodeWithTheLowestG.G + 10);
+                _result.G.ShouldBe(_nodeWithTheLowestG.G + 10);
 
             [Test]
             public void Should_not_change_its_h_cost() =>
-                _node.H.ShouldBe(_someH);
+                _result.H.ShouldBe(_someH);
 
             [Test]
             public void Should_preserve_its_former_f() =>
-                _node.F.ShouldBe(_nodeWithTheLowestG.G + 10 + _node.H);
+                _result.F.ShouldBe(_nodeWithTheLowestG.G + 10 + _result.H);
         }
 
 
@@ -72,6 +72,7 @@ namespace Astar.Specs.Node
         Astar.Node _nodeWithTheLowestG;
         Astar.Node _node;
         Astar.Node _potentialNewParent;
+        Astar.Node _result;
         int _someH = 100;
     }
 }

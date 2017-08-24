@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using Doing.BDDExtensions;
 using NUnit.Framework;
 using FluentAssertions;
-using static Astar.PathFinder;
 
-namespace Astar.Specs
+namespace Astar.Specs.PathFinder
 {
     public class IsAvailableSpecs : FeatureSpecifications
     {
         public override void When() =>
-            _result = IsAvailable(_isWalkable, _closedList, _node);
+            _result = Astar.PathFinder.IsAvailable(_isWalkable, _closedList, _point);
 
         public class When_the_node_is_walkable : IsAvailableSpecs
         {
@@ -20,7 +19,7 @@ namespace Astar.Specs
             public class When_the_node_is_walkable_and_is_in_the_closed_list : When_the_node_is_walkable
             {
                 public override void Given() =>
-                    _closedList.Add(_node);
+                    _closedList.Add(_point);
 
                 [Test]
                 public void Should_not_be_considered_fit_to_be_added() =>
@@ -30,7 +29,7 @@ namespace Astar.Specs
             public class When_the_node_is_walkable_and_is_not_in_the_closed_list : When_the_node_is_walkable
             {
                 //public override void Given() =>
-                //    _closedList.Add(_node);
+                //    _closedList.Add(_point);
 
                 [Test]
                 public void Should_be_considered_fit_to_be_added() =>
@@ -46,7 +45,7 @@ namespace Astar.Specs
             public class When_the_node_is_unwalkable_but_is_in_the_closed_list : When_the_node_is_unwalkable
             {
                 public override void Given() =>
-                    _closedList.Add(_node);
+                    _closedList.Add(_point);
 
                 [Test]
                 public void Should_not_be_considered_fit_to_be_added() =>
@@ -56,7 +55,7 @@ namespace Astar.Specs
             public class When_the_node_is_unwalkable_and_is_not_in_the_closed_list : When_the_node_is_unwalkable
             {
                 //public override void Given() =>
-                //    _closedList.Add(_node);
+                //    _closedList.Add(_point);
 
                 [Test]
                 public void Should_not_be_considered_fit_to_be_added() =>
@@ -70,6 +69,6 @@ namespace Astar.Specs
         ISet<(int x, int y)> _closedList = new HashSet<(int x, int y)>();
         bool _result;
 
-        static (int x, int y) _node = (2, 3);
+        static (int x, int y) _point = (2, 3);
     }
 }

@@ -1,18 +1,19 @@
 using Doing.BDDExtensions;
 using NUnit.Framework;
 using FluentAssertions;
+using static Astar.PathFinder;
 
-namespace Astar.Specs.Node
+namespace Astar.Specs.PathFinder
 {
     public class FindTheCostOfAdjacentMoveSpecs : FeatureSpecifications
     {
         public override void When() => 
-            _result = _someNode.FindTheCostOfAdjacentMoveTo(_targetPoint);
+            _result = FindTheCostOfAdjacentMove(_basePoint, _adjacentPoint);
 
         public class When_the_target_point_is_just_above_the_source_point : FindTheCostOfAdjacentMoveSpecs
         {
             public override void Given() =>
-                _targetPoint = (FindTheCostOfAdjacentMoveSpecs._someNode.Point.x, FindTheCostOfAdjacentMoveSpecs._someNode.Point.y - 1);
+                _adjacentPoint = (_basePoint.x, _basePoint.y - 1);
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
@@ -22,7 +23,7 @@ namespace Astar.Specs.Node
         public class When_the_target_point_is_just_below_the_source_point : FindTheCostOfAdjacentMoveSpecs
         {
             public override void Given() =>
-                _targetPoint = (FindTheCostOfAdjacentMoveSpecs._someNode.Point.x, FindTheCostOfAdjacentMoveSpecs._someNode.Point.y + 1);
+                _adjacentPoint = (_basePoint.x, _basePoint.y + 1);
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
@@ -32,7 +33,7 @@ namespace Astar.Specs.Node
         public class When_the_target_point_is_just_at_the_left_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
         {
             public override void Given() =>
-                _targetPoint = (FindTheCostOfAdjacentMoveSpecs._someNode.Point.x - 1, FindTheCostOfAdjacentMoveSpecs._someNode.Point.y);
+                _adjacentPoint = (_basePoint.x - 1, _basePoint.y);
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
@@ -42,7 +43,7 @@ namespace Astar.Specs.Node
         public class When_the_target_point_is_just_at_the_right_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
         {
             public override void Given() =>
-                _targetPoint = (FindTheCostOfAdjacentMoveSpecs._someNode.Point.x + 1, FindTheCostOfAdjacentMoveSpecs._someNode.Point.y);
+                _adjacentPoint = (_basePoint.x + 1, _basePoint.y);
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
@@ -52,7 +53,7 @@ namespace Astar.Specs.Node
         public class When_the_target_point_is_in_the_top_left_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
         {
             public override void Given() =>
-                _targetPoint = (FindTheCostOfAdjacentMoveSpecs._someNode.Point.x - 1, FindTheCostOfAdjacentMoveSpecs._someNode.Point.y - 1);
+                _adjacentPoint = (_basePoint.x - 1, _basePoint.y - 1);
 
             [Test]
             public void Should_calculate_a_cost_of_14() =>
@@ -62,7 +63,7 @@ namespace Astar.Specs.Node
         public class When_the_target_point_is_in_the_top_right_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
         {
             public override void Given() =>
-                _targetPoint = (FindTheCostOfAdjacentMoveSpecs._someNode.Point.x + 1, FindTheCostOfAdjacentMoveSpecs._someNode.Point.y - 1);
+                _adjacentPoint = (_basePoint.x + 1, _basePoint.y - 1);
 
             [Test]
             public void Should_calculate_a_cost_of_14() =>
@@ -72,7 +73,7 @@ namespace Astar.Specs.Node
         public class When_the_target_point_is_in_the_bottom_left_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
         {
             public override void Given() =>
-                _targetPoint = (FindTheCostOfAdjacentMoveSpecs._someNode.Point.x - 1, FindTheCostOfAdjacentMoveSpecs._someNode.Point.y + 1);
+                _adjacentPoint = (_basePoint.x - 1, _basePoint.y + 1);
 
             [Test]
             public void Should_calculate_a_cost_of_14() =>
@@ -82,7 +83,7 @@ namespace Astar.Specs.Node
         public class When_the_target_point_is_in_the_bottom_right_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
         {
             public override void Given() =>
-                _targetPoint = (FindTheCostOfAdjacentMoveSpecs._someNode.Point.x + 1, FindTheCostOfAdjacentMoveSpecs._someNode.Point.y + 1);
+                _adjacentPoint = (_basePoint.x + 1, _basePoint.y + 1);
 
             [Test]
             public void Should_calculate_a_cost_of_14() =>
@@ -90,9 +91,9 @@ namespace Astar.Specs.Node
         }
 
 
-        (int x, int y) _targetPoint;
+        (int x, int y) _adjacentPoint;
         int _result;
 
-        static Astar.Node _someNode = ObjectMother.CreateSomeNodeWith((10, 10));
+        static (int x, int y) _basePoint = (10, 10);
     }
 }

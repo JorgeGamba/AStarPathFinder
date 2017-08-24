@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Astar.Specs.Node;
 using Doing.BDDExtensions;
 using NUnit.Framework;
 using FluentAssertions;
@@ -30,7 +31,7 @@ namespace Astar.Specs
             public override void Given()
             {
                 var parentNode = Astar.Node.CreateTheStartingNodeWith(_someStartingPoint);
-                _node = Astar.Node.CreateNodeWith(parentNode, _someDestinationPoint, _someEstimatedH);
+                _node = ObjectMother.CreateNodeWith(parentNode, _someDestinationPoint);
             }
 
             [Test]
@@ -51,8 +52,8 @@ namespace Astar.Specs
             public override void Given()
             {
                 var startingNode = Astar.Node.CreateTheStartingNodeWith(_someStartingPoint);
-                var middleNode = Astar.Node.CreateNodeWith(startingNode, _someMiddlePoint, _someEstimatedH);
-                _node = Astar.Node.CreateNodeWith(middleNode, _someDestinationPoint, _someEstimatedH);
+                var middleNode = ObjectMother.CreateNodeWith(startingNode, _someMiddlePoint);
+                _node = ObjectMother.CreateNodeWith(middleNode, _someDestinationPoint);
             }
 
             [Test]

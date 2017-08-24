@@ -9,7 +9,7 @@ namespace Astar
         public static ISearchResult FindShortestPath((int x, int y) startingPoint, (int x, int y) destinationPoint, Predicate<(int, int)> isWalkable, Func<(int x, int y), (int x, int y), int> estimateH)
         {
             if (!isWalkable(startingPoint))
-                throw new Exception($"The starting position (x: {startingPoint.x}, y: {startingPoint.y}) it is not a walkable node.");
+                throw new Exception($"The starting position (x: {startingPoint.x}, y: {startingPoint.y}) it is not a walkable point.");
 
             // Bootstrap
             var startingNode = Node.CreateTheStartingNodeWith(startingPoint);
@@ -25,19 +25,20 @@ namespace Astar
 
                 openSet.Remove(current.Point);
 
-                var availableAdjacentPoints = current.Node.GetAdjacentPoints().Where(node => IsAvailable(isWalkable, closedSet, node)); // TODO: A well candidate for partial application
+                var availableAdjacentPoints = GetAvailableAdjacentPointsTo(current.Point, isWalkable, closedSet);
                 foreach (var availablePoint in availableAdjacentPoints)
                 {
                     Node availableNode;
-                    if (openSet.TryGetValue(availablePoint, out availableNode))
+                    var point = (availablePoint.x, availablePoint.y);
+                    if (openSet.TryGetValue(point, out availableNode))
                     {
-                        availableNode.UpdateGiven(current.Node);
+                        availableNode.UpdateGiven(current.Node, availablePoint.fromParentMoveCost);
                     }
                     else
                     {
-                        var h = EstimateHFromFor(availablePoint);
+                        var h = EstimateHFromFor(point);
                         availableNode = Node.CreateNodeWith(current.Node, availablePoint, h);
-                        openSet.Add(availablePoint, availableNode);
+                        openSet.Add(point, availableNode);
                     }
                 }
                 closedSet.Add(current.Node.Point);
@@ -62,9 +63,39 @@ namespace Astar
             }
             return (point, node);
         }
-        
 
-        internal static bool IsAvailable(Predicate<(int, int)> isWalkable, ISet<(int x, int y)> closedList, (int x, int y) node) => 
-            isWalkable(node) && !closedList.Contains(node);
+        internal static IEnumerable<(int x, int y, int fromParentMoveCost)> GetAvailableAdjacentPointsTo((int x, int y) basePoint, Predicate<(int, int)> isWalkable, ISet<(int x, int y)> closedList)
+        {
+            var up = isWalkable((basePoint.x, basePoint.y - 1));
+            var down = isWalkable((basePoint.x, basePoint.y + 1));
+            var left = isWalkable((basePoint.x - 1, basePoint.y));
+            var right = isWalkable((basePoint.x + 1, basePoint.y));
+
+            var list = new List<(int x, int y, int fromParentMoveCost)>();
+            if (up)
+                list.Add((basePoint.x, basePoint.y - 1, 10));
+            if (right)
+                list.Add((basePoint.x + 1, basePoint.y, 10));
+            if (down)
+                list.Add((basePoint.x, basePoint.y + 1, 10));
+            if (left)
+                list.Add((basePoint.x - 1, basePoint.y, 10));
+            if (up && right)
+                list.Add((basePoint.x + 1, basePoint.y - 1, 14));
+            if (right && down)
+                list.Add((basePoint.x + 1, basePoint.y + 1, 14));
+            if (left && down)
+                list.Add((basePoint.x - 1, basePoint.y + 1, 14));
+            if (left && up)
+                list.Add((basePoint.x - 1, basePoint.y - 1, 14));
+
+            return list.Where(p => IsAvailable(isWalkable, closedList, (p.x, p.y)));
+        }
+
+    internal static bool IsAvailable(Predicate<(int, int)> isWalkable, ISet<(int x, int y)> closedList, (int x, int y) point) => 
+            isWalkable((point.x, point.y)) && !closedList.Contains((point.x, point.y));
+
+        public static int FindTheCostOfAdjacentMove((int x, int y) basePoint, (int x, int y) adjacentPoint) =>
+            Math.Abs(adjacentPoint.x - basePoint.x + adjacentPoint.y - basePoint.y) == 1 ? 10 : 14;
     }
 }

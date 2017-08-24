@@ -9,13 +9,13 @@ namespace Astar.Specs.Node
         public CreateNodeSpecs()
         {
             _parent = CreateTheStartingNodeWith((10, 10));
-            _point = (11, 11);
-            _result = CreateNodeWith(_parent, _point, _someHCost);
+            _adjacentPoint = (11, 11, 14);
+            _result = CreateNodeWith(_parent, _adjacentPoint, _someHCost);
         }
 
         [Test]
         public void Should_have_the_same_former_point() =>
-            _result.Point.Should().Be(_point);
+            _result.Point.Should().Be((_adjacentPoint.x, _adjacentPoint.y));
 
         [Test]
         public void Should_have_a_g_cost_equal_to_the_sum_of_the_g_cost_of_its_parent_and_the_cost_of_move_from_there() =>
@@ -34,7 +34,7 @@ namespace Astar.Specs.Node
             _result.Parent.Should().Be(_parent);
 
         Astar.Node _parent;
-        (int x, int y) _point;
+        (int x, int y, int fromParentMoveCost) _adjacentPoint;
         Astar.Node _result;
 
         static int _someHCost = 7;

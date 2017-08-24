@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Astar
 {
@@ -24,25 +23,9 @@ namespace Astar
 
         public Node Parent { get; private set; }
 
-        public IEnumerable<(int x, int y)> GetAdjacentPoints() =>
-            new[]
-            {
-                (Point.x, Point.y + 1),
-                (Point.x, Point.y - 1),
-                (Point.x + 1, Point.y),
-                (Point.x - 1, Point.y),
-                (Point.x - 1, Point.y - 1),
-                (Point.x - 1, Point.y + 1),
-                (Point.x + 1, Point.y - 1),
-                (Point.x + 1, Point.y + 1)
-            };
-
-        public int FindTheCostOfAdjacentMoveTo((int x, int y) targetPoint) =>
-            Math.Abs(targetPoint.x - Point.x + targetPoint.y - Point.y) == 1 ? 10 : 14;
-
-        public Node UpdateGiven(Node potentialNewParent)
+        public Node UpdateGiven(Node potentialNewParent, int fromParentMoveCost)
         {
-            var potentialNewG = potentialNewParent.G + potentialNewParent.FindTheCostOfAdjacentMoveTo(Point);
+            var potentialNewG = potentialNewParent.G + fromParentMoveCost;
             if (potentialNewG < G)
             {
                 Parent = potentialNewParent;
@@ -54,12 +37,12 @@ namespace Astar
         }
 
 
-        public static Node CreateNodeWith(Node parent, (int x, int y) point, int h)
+        public static Node CreateNodeWith(Node parent, (int x, int y, int fromParentMoveCost) point, int h)
         {
-            var g = parent.G + parent.FindTheCostOfAdjacentMoveTo(point);
+            var g = parent.G + point.fromParentMoveCost;
             var f = g + h;
 
-            return new Node(point, g, h, f, parent);
+            return new Node((point.x, point.y), g, h, f, parent);
         }
 
         public static Node CreateTheStartingNodeWith((int x, int y) point) => 

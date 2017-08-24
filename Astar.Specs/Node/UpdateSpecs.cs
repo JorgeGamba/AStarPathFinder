@@ -10,19 +10,20 @@ namespace Astar.Specs.Node
         public override void Given()
         {
             var startingNode = CreateTheStartingNodeWith((10, 10));
-            _nodeWithTheHighestG = CreateNodeWith(CreateNodeWith(startingNode, (11, 11), _someH), (12, 12), _someH); // Becauses its double diagonal move (G = 14 + 14)
-            _nodeWithTheLowestG = CreateNodeWith(CreateNodeWith(startingNode, (11, 10), _someH), (12, 10), _someH);  // Becauses its double horizontal move (G = 10 + 10)
+            _nodeWithTheHighestG = ObjectMother.CreateNodeWith(ObjectMother.CreateNodeWith(startingNode, adjacentPoint: (11, 11, 14)), adjacentPoint: (12, 12, 14)); // Becauses its double diagonal move (G = 14 + 14)
+            _nodeWithTheLowestG = ObjectMother.CreateNodeWith(ObjectMother.CreateNodeWith(startingNode, adjacentPoint: (11, 10, 10)), adjacentPoint: (12, 10, 10));  // Becauses its double horizontal move (G = 10 + 10)
         }
 
         public override void When() =>
-            _result = _node.UpdateGiven(_potentialNewParent);
+            _result = _node.UpdateGiven(_potentialNewParent, _fromParentMoveCost);
 
         public class When_the_new_potential_g_is_less_than_the_current : UpdateSpecs
         {
             public override void Given()
             {
-                _node = CreateNodeWith(_nodeWithTheHighestG, (12, 11), _someH);
+                _node = ObjectMother.CreateNodeWith(_nodeWithTheHighestG, adjacentPoint: (12, 11, 10));
                 _potentialNewParent = _nodeWithTheLowestG;
+                UpdateFromParentMoveCost();
             }
 
             [Test]
@@ -35,7 +36,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_not_change_its_h_cost() =>
-                _result.H.Should().Be(_someH);
+                _result.H.Should().Be(_node.H);
 
             [Test]
             public void Should_change_its_f_according_the_new_g() =>
@@ -46,8 +47,9 @@ namespace Astar.Specs.Node
         {
             public override void Given()
             {
-                _node = CreateNodeWith(_nodeWithTheLowestG, (12, 11), _someH);
+                _node = ObjectMother.CreateNodeWith(_nodeWithTheLowestG, adjacentPoint: (12, 11, 10));
                 _potentialNewParent = _nodeWithTheHighestG;
+                UpdateFromParentMoveCost();
             }
 
             [Test]
@@ -60,19 +62,22 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_not_change_its_h_cost() =>
-                _result.H.Should().Be(_someH);
+                _result.H.Should().Be(_node.H);
 
             [Test]
             public void Should_preserve_its_former_f() =>
                 _result.F.Should().Be(_nodeWithTheLowestG.G + 10 + _result.H);
         }
 
+        void UpdateFromParentMoveCost() => 
+            _fromParentMoveCost = Astar.PathFinder.FindTheCostOfAdjacentMove(_potentialNewParent.Point, _node.Point);
+
 
         Astar.Node _nodeWithTheHighestG;
         Astar.Node _nodeWithTheLowestG;
         Astar.Node _node;
         Astar.Node _potentialNewParent;
+        int _fromParentMoveCost;
         Astar.Node _result;
-        int _someH = 100;
     }
 }

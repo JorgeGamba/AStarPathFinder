@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FoundSolutionSpecs.cs" />
+    <Compile Include="ManhattanMethodSpecs.cs" />
     <Compile Include="Node\CreateTheStartingNodeSpecs.cs" />
     <Compile Include="Node\FindTheCostOfAdjacentMoveSpecs.cs" />
     <Compile Include="Node\CreateNodeSpecs.cs" />

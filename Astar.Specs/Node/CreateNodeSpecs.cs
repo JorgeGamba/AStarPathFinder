@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Shouldly;
+using FluentAssertions;
 using static Astar.Node;
 
 namespace Astar.Specs.Node
@@ -15,23 +15,23 @@ namespace Astar.Specs.Node
 
         [Test]
         public void Should_have_the_same_former_point() =>
-            _result.Point.ShouldBe(_point);
+            _result.Point.Should().Be(_point);
 
         [Test]
         public void Should_have_a_g_cost_equal_to_the_sum_of_the_g_cost_of_its_parent_and_the_cost_of_move_from_there() =>
-            _result.G.ShouldBe(_parent.G + 14);
+            _result.G.Should().Be(_parent.G + 14);
 
         [Test]
         public void Should_have_the_h_cost_produced_by_the_heuristic_function() =>
-            _result.H.ShouldBe(_someHCost);
+            _result.H.Should().Be(_someHCost);
 
         [Test]
         public void Should_have_a_f_cost_equal_to_the_sum_of_g_and_h() =>
-            _result.F.ShouldBe(_result.G + _result.H);
+            _result.F.Should().Be(_result.G + _result.H);
 
         [Test]
         public void Should_have_the_parent_provided() =>
-            _result.Parent.ShouldBe(_parent);
+            _result.Parent.Should().Be(_parent);
 
         Astar.Node _parent;
         (int x, int y) _point;

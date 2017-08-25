@@ -1,6 +1,6 @@
 using Doing.BDDExtensions;
 using NUnit.Framework;
-using Shouldly;
+using FluentAssertions;
 
 namespace Astar.Specs.Node
 {
@@ -16,7 +16,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
-                _result.ShouldBe(10);
+                _result.Should().Be(10);
         }
 
         public class When_the_target_point_is_just_below_the_source_point : FindTheCostOfAdjacentMoveSpecs
@@ -26,7 +26,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
-                _result.ShouldBe(10);
+                _result.Should().Be(10);
         }
 
         public class When_the_target_point_is_just_at_the_left_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
@@ -36,7 +36,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
-                _result.ShouldBe(10);
+                _result.Should().Be(10);
         }
 
         public class When_the_target_point_is_just_at_the_right_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
@@ -46,7 +46,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
-                _result.ShouldBe(10);
+                _result.Should().Be(10);
         }
 
         public class When_the_target_point_is_in_the_top_left_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
@@ -56,7 +56,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_calculate_a_cost_of_14() =>
-                _result.ShouldBe(14);
+                _result.Should().Be(14);
         }
 
         public class When_the_target_point_is_in_the_top_right_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
@@ -66,7 +66,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_calculate_a_cost_of_14() =>
-                _result.ShouldBe(14);
+                _result.Should().Be(14);
         }
 
         public class When_the_target_point_is_in_the_bottom_left_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
@@ -76,7 +76,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_calculate_a_cost_of_14() =>
-                _result.ShouldBe(14);
+                _result.Should().Be(14);
         }
 
         public class When_the_target_point_is_in_the_bottom_right_of_the_source_point : FindTheCostOfAdjacentMoveSpecs
@@ -86,7 +86,7 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_calculate_a_cost_of_14() =>
-                _result.ShouldBe(14);
+                _result.Should().Be(14);
         }
 
 

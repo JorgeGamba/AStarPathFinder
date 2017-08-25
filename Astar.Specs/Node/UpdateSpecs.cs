@@ -1,6 +1,6 @@
 ﻿using Doing.BDDExtensions;
 using NUnit.Framework;
-using Shouldly;
+using FluentAssertions;
 using static Astar.Node;
 
 namespace Astar.Specs.Node
@@ -27,19 +27,19 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_take_the_passed_potential_parent_as_its_new_parent() =>
-                _result.Parent.ShouldBe(_potentialNewParent);
+                _result.Parent.Should().Be(_potentialNewParent);
 
             [Test]
             public void Should_change_its_g_cost_to_its_parents_g_plus_the_adjacent_move_cost() =>
-                _result.G.ShouldBe(_potentialNewParent.G + 10);
+                _result.G.Should().Be(_potentialNewParent.G + 10);
 
             [Test]
             public void Should_not_change_its_h_cost() =>
-                _result.H.ShouldBe(_someH);
+                _result.H.Should().Be(_someH);
 
             [Test]
             public void Should_change_its_f_according_the_new_g() =>
-                _result.F.ShouldBe(_potentialNewParent.G + 10 + _result.H);
+                _result.F.Should().Be(_potentialNewParent.G + 10 + _result.H);
         }
 
         public class When_the_new_potential_g_is_greater_than_the_current : UpdateSpecs
@@ -52,19 +52,19 @@ namespace Astar.Specs.Node
 
             [Test]
             public void Should_preserve_its_former_parent() =>
-                _result.Parent.ShouldBe(_nodeWithTheLowestG);
+                _result.Parent.Should().Be(_nodeWithTheLowestG);
 
             [Test]
             public void Should_preserve_its_former_g_cost() =>
-                _result.G.ShouldBe(_nodeWithTheLowestG.G + 10);
+                _result.G.Should().Be(_nodeWithTheLowestG.G + 10);
 
             [Test]
             public void Should_not_change_its_h_cost() =>
-                _result.H.ShouldBe(_someH);
+                _result.H.Should().Be(_someH);
 
             [Test]
             public void Should_preserve_its_former_f() =>
-                _result.F.ShouldBe(_nodeWithTheLowestG.G + 10 + _result.H);
+                _result.F.Should().Be(_nodeWithTheLowestG.G + 10 + _result.H);
         }
 
 

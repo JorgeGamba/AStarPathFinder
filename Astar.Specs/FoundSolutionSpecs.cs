@@ -1,8 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Doing.BDDExtensions;
 using NUnit.Framework;
-using Shouldly;
+using FluentAssertions;
 using static Astar.FoundSolution;
 
 namespace Astar.Specs
@@ -19,11 +18,11 @@ namespace Astar.Specs
 
             [Test]
             public void Should_contain_only_one_element() =>
-                _result.Value.ShouldHaveSingleItem();
+                _result.Value.Count.Should().Be(1);
 
             [Test]
             public void Should_contain_only_the_exactly_former_starting_point() =>
-                _result.Value.ShouldBe(new []{ _node.Point });
+                _result.Value.Should().Equal(_node.Point);
         }
 
         public class When_the_solution_is_two_elements : FoundSolutionSpecs
@@ -36,15 +35,15 @@ namespace Astar.Specs
 
             [Test]
             public void Should_contain_only_two_elements() =>
-                _result.Value.Count.ShouldBe(2);
+                _result.Value.Count.Should().Be(2);
 
             [Test]
             public void Should_the_first_element_be_the_starting_point() =>
-                _result.Value.First().ShouldBe(_someStartingPoint);
+                _result.Value.First().Should().Be(_someStartingPoint);
 
             [Test]
             public void Should_the_last_element_be_the_destination_point() =>
-                _result.Value.Last().ShouldBe(_someDestinationPoint);
+                _result.Value.Last().Should().Be(_someDestinationPoint);
         }
 
         public class When_the_solution_has_multiple_elements : FoundSolutionSpecs
@@ -58,19 +57,19 @@ namespace Astar.Specs
 
             [Test]
             public void Should_contain_the_total_of_chained_nodes() =>
-                _result.Value.Count.ShouldBe(3);
+                _result.Value.Count.Should().Be(3);
 
             [Test]
             public void Should_the_first_element_be_the_starting_point() =>
-                _result.Value.First().ShouldBe(_someStartingPoint);
+                _result.Value.First().Should().Be(_someStartingPoint);
 
             [Test]
             public void Should_have_all_the_solution_elements_ordered_as_they_were_added() =>
-                _result.Value.ShouldBe(new[] {_someStartingPoint, _someMiddlePoint, _someDestinationPoint});
+                _result.Value.Should().Equal(_someStartingPoint, _someMiddlePoint, _someDestinationPoint);
 
             [Test]
             public void Should_the_last_element_be_the_destination_point() =>
-                _result.Value.Last().ShouldBe(_someDestinationPoint);
+                _result.Value.Last().Should().Be(_someDestinationPoint);
 
 
             static (int, int) _someMiddlePoint = (10, 11);

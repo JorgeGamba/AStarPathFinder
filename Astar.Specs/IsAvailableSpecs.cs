@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Doing.BDDExtensions;
 using NUnit.Framework;
-using Shouldly;
+using FluentAssertions;
 using static Astar.PathFinder;
 
 namespace Astar.Specs
@@ -24,7 +24,7 @@ namespace Astar.Specs
 
                 [Test]
                 public void Should_not_be_considered_fit_to_be_added() =>
-                    _result.ShouldBeFalse();
+                    _result.Should().BeFalse();
             }
 
             public class When_the_node_is_walkable_and_is_not_in_the_closed_list : When_the_node_is_walkable
@@ -34,7 +34,7 @@ namespace Astar.Specs
 
                 [Test]
                 public void Should_be_considered_fit_to_be_added() =>
-                    _result.ShouldBeTrue();
+                    _result.Should().BeTrue();
             }
         }
 
@@ -50,7 +50,7 @@ namespace Astar.Specs
 
                 [Test]
                 public void Should_not_be_considered_fit_to_be_added() =>
-                    _result.ShouldBeFalse();
+                    _result.Should().BeFalse();
             }
 
             public class When_the_node_is_unwalkable_and_is_not_in_the_closed_list : When_the_node_is_unwalkable
@@ -60,7 +60,7 @@ namespace Astar.Specs
 
                 [Test]
                 public void Should_not_be_considered_fit_to_be_added() =>
-                    _result.ShouldBeFalse();
+                    _result.Should().BeFalse();
             }
         }
 

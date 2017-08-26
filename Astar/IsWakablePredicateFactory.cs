@@ -5,7 +5,7 @@ namespace Astar
 {
     public static class IsWakablePredicateFactory
     {
-        public static Predicate<Point> CreateIsWakablePredicate(HashSet<Point> walkablePoints) => 
+        public static Predicate<Point> CreateIsWakablePredicateFrom(HashSet<Point> walkablePoints) => 
             walkablePoints.Contains;
     }
 }

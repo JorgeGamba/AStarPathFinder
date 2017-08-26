@@ -17,7 +17,7 @@ namespace Astar.Specs
         {
             public override void Given()
             {
-                _predicate = CreateIsWakablePredicate(new HashSet<Point>());
+                _predicate = CreateIsWakablePredicateFrom(new HashSet<Point>());
                 _point = _somePoint;
             }
 
@@ -30,7 +30,7 @@ namespace Astar.Specs
         {
             public override void Given()
             {
-                _predicate = CreateIsWakablePredicate(new HashSet<Point> { _somePoint});
+                _predicate = CreateIsWakablePredicateFrom(new HashSet<Point> { _somePoint});
                 _point = _somePoint;
             }
 

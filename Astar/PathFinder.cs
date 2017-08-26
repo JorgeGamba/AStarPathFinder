@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Priority_Queue;
 
 namespace Astar
 {
@@ -12,53 +13,41 @@ namespace Astar
 
             // Bootstrap
             var startingNode = Node.CreateTheStartingNodeWith(startingPoint);
-            var openSet = new Dictionary<Point, Node> { {startingPoint, startingNode } };
+            var openList = new SimplePriorityQueue<Point>();
+            openList.Enqueue(startingPoint, 0);
+            var nodesByPoint = new Dictionary<Point, Node> { {startingPoint, startingNode } };
             var closedSet = new HashSet<Point>();
             int EstimateHFromFor(Point point) => estimateH(point, destinationPoint);
 
-            while (openSet.Any())
+            while (openList.Any())
             {
-                var current = GetCurrentFrom(openSet);
-                if (current.Point.Equals(destinationPoint))
-                    return FoundSolution.CreateSolutionFor(current.Node);
+                var currentPoint = openList.Dequeue();
+                var currentNode = nodesByPoint[currentPoint];
+                if (currentPoint.Equals(destinationPoint))
+                    return FoundSolution.CreateSolutionFor(currentNode);
 
-                openSet.Remove(current.Point);
+                nodesByPoint.Remove(currentPoint);
 
-                var availableAdjacentPoints = GetAvailableAdjacentPointsTo(current.Point, isWalkable, closedSet);
+                var availableAdjacentPoints = GetAvailableAdjacentPointsTo(currentPoint, isWalkable, closedSet);
                 foreach (var adjacentPoint in availableAdjacentPoints)
                 {
                     Node availableNode;
-                    if (openSet.TryGetValue(adjacentPoint.Point, out availableNode))
+                    if (nodesByPoint.TryGetValue(adjacentPoint.Point, out availableNode))
                     {
-                        availableNode.UpdateGiven(current.Node, adjacentPoint.FromParentMoveCost);
+                        availableNode.UpdateGiven(currentNode, adjacentPoint.FromParentMoveCost);
+                        openList.UpdatePriority(adjacentPoint.Point, availableNode.F);
                     }
                     else
                     {
                         var h = EstimateHFromFor(adjacentPoint.Point);
-                        availableNode = Node.CreateNodeWith(current.Node, adjacentPoint, h);
-                        openSet.Add(adjacentPoint.Point, availableNode);
+                        availableNode = Node.CreateNodeWith(currentNode, adjacentPoint, h);
+                        nodesByPoint.Add(adjacentPoint.Point, availableNode);
+                        openList.Enqueue(adjacentPoint.Point, availableNode.F);
                     }
                 }
-                closedSet.Add(current.Point);
+                closedSet.Add(currentPoint);
             }
             return new NotFoundSolution();
-        }
-
-        internal static (Point Point, Node Node) GetCurrentFrom(IDictionary<Point, Node> openSet)
-        {
-            var lowestF = int.MaxValue;
-            Node node = null;
-            var point = new Point(0, 0);
-            foreach (var pair in openSet)
-            {
-                if (pair.Value.F < lowestF)
-                {
-                    node = pair.Value;
-                    point = pair.Key;
-                    lowestF = pair.Value.F;
-                }
-            }
-            return (point, node);
         }
 
         internal static IEnumerable<(Point Point, int FromParentMoveCost)> GetAvailableAdjacentPointsTo(Point basePoint, Predicate<Point> isWalkable, ISet<Point> closedList)

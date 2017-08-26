@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FoundSolutionSpecs.cs" />
+    <Compile Include="IsWakablePredicateFactorySpecs.cs" />
     <Compile Include="ManhattanMethodSpecs.cs" />
     <Compile Include="Node\CreateTheStartingNodeSpecs.cs" />
     <Compile Include="Node\CreateNodeSpecs.cs" />

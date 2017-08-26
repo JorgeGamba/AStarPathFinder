@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FoundSolution.cs" />
+    <Compile Include="IsWakablePredicateFactory.cs" />
     <Compile Include="PathFinder.cs" />
     <Compile Include="ISearchResult.cs" />
     <Compile Include="ManhattanMethod.cs" />

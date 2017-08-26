@@ -4,7 +4,7 @@ namespace Astar
 {
     public class ManhattanMethod
     {
-        public static int CalculateHeuristicCostFor((int x, int y) sourcePoint, (int x, int y) targetPoint) => 
-            (Math.Abs(targetPoint.x - sourcePoint.x) + Math.Abs(targetPoint.y - sourcePoint.y)) * 10;
+        public static int CalculateHeuristicCostFor(Point sourcePoint, Point targetPoint) => 
+            (Math.Abs(targetPoint.X - sourcePoint.X) + Math.Abs(targetPoint.Y - sourcePoint.Y)) * 10;
     }
 }

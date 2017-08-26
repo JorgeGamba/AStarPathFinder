@@ -1,9 +1,9 @@
 ﻿using System.Linq;
-using Astar.Specs.Node;
 using Doing.BDDExtensions;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 using static Astar.FoundSolution;
+using static Astar.Specs.ObjectMother;
 
 namespace Astar.Specs
 {
@@ -15,7 +15,7 @@ namespace Astar.Specs
         public class When_the_solution_is_just_the_starting_point : FoundSolutionSpecs
         {
             public override void Given() =>
-                _node = Astar.Node.CreateTheStartingNodeWith((10, 10));
+                _node = Astar.Node.CreateTheStartingNodeWith(new Point(10, 10));
 
             [Test]
             public void Should_contain_only_one_element() =>
@@ -31,7 +31,7 @@ namespace Astar.Specs
             public override void Given()
             {
                 var parentNode = Astar.Node.CreateTheStartingNodeWith(_someStartingPoint);
-                _node = ObjectMother.CreateNodeWith(parentNode, _someDestinationPoint);
+                _node = CreateNodeWith(parentNode, _someDestinationPoint);
             }
 
             [Test]
@@ -52,8 +52,8 @@ namespace Astar.Specs
             public override void Given()
             {
                 var startingNode = Astar.Node.CreateTheStartingNodeWith(_someStartingPoint);
-                var middleNode = ObjectMother.CreateNodeWith(startingNode, _someMiddlePoint);
-                _node = ObjectMother.CreateNodeWith(middleNode, _someDestinationPoint);
+                var middleNode = CreateNodeWith(startingNode, _someMiddlePoint);
+                _node = CreateNodeWith(middleNode, _someDestinationPoint);
             }
 
             [Test]
@@ -73,14 +73,14 @@ namespace Astar.Specs
                 _result.Value.Last().Should().Be(_someDestinationPoint);
 
 
-            static (int, int) _someMiddlePoint = (10, 11);
+            static Point _someMiddlePoint = new Point(10, 11);
         }
 
         Astar.Node _node;
         FoundSolution _result;
 
         static int _someEstimatedH = 1;
-        static (int, int) _someStartingPoint = (10, 10);
-        static (int, int) _someDestinationPoint = (11, 10);
+        static Point _someStartingPoint = new Point(10, 10);
+        static Point _someDestinationPoint = new Point(11, 10);
     }
 }

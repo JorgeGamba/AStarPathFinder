@@ -1,15 +1,17 @@
 using System;
 using System.Linq;
 using Doing.BDDExtensions;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
+using static Astar.PathFinder;
 
 namespace Astar.Specs.PathFinder
 {
+    [Category("Astar.PathFinder.FindShortestPath")]
     public class FindShortestPathSpecs : FeatureSpecifications
     {
         public override void When() => _exception = Catch.Exception(() =>
-            _result = Astar.PathFinder.FindShortestPath(_startingPoint, _destinationPoint, _isWalkableFunc, _anyEstimateHFunc)
+            _result = FindShortestPath(_startingPoint, _destinationPoint, _isWalkableFunc, _anyEstimateHFunc)
         );
 
         public class When_the_starting_point_is_the_same_as_the_target_point : FindShortestPathSpecs
@@ -45,7 +47,7 @@ namespace Astar.Specs.PathFinder
 
             [Test]
             public void Should_throw_an_exception_indicating_the_reason() =>
-                _exception.Message.Should().Be($"The starting position (x: {_startingPoint.x}, y: {_startingPoint.y}) it is not a walkable point.");
+                _exception.Message.Should().Be($"The starting position (x: {_startingPoint.X}, y: {_startingPoint.Y}) it is not a walkable point.");
         }
 
         public class When_there_is_no_way_to_reach_the_destination_point : FindShortestPathSpecs
@@ -53,7 +55,7 @@ namespace Astar.Specs.PathFinder
             public override void Given()
             {
                 _startingPoint = _someStartingPoint;
-                _destinationPoint = (_startingPoint.x + 2, _startingPoint.y + 2);
+                _destinationPoint = new Point(_startingPoint.X + 2, _startingPoint.Y + 2);
                 _isWalkableFunc = point => point.Equals(_startingPoint);
             }
 
@@ -67,7 +69,7 @@ namespace Astar.Specs.PathFinder
             public override void Given()
             {
                 _startingPoint = _someStartingPoint;
-                _destinationPoint = (_startingPoint.x + 1, _startingPoint.y);
+                _destinationPoint = new Point(_startingPoint.X + 1, _startingPoint.Y);
                 _isWalkableFunc = _allIsWalkableFunc;
             }
 
@@ -85,7 +87,7 @@ namespace Astar.Specs.PathFinder
             public override void Given()
             {
                 _startingPoint = _someStartingPoint;
-                _destinationPoint = (_startingPoint.x + 2, _startingPoint.y);
+                _destinationPoint = new Point(_startingPoint.X + 2, _startingPoint.Y);
                 _isWalkableFunc = _allIsWalkableFunc;
             }
 
@@ -95,7 +97,7 @@ namespace Astar.Specs.PathFinder
 
             [Test]
             public void Should_return_only_the_starting_point_as_the_solution() =>
-                ((FoundSolution)_result).Value.Should().Equal(new[] { _startingPoint, (_startingPoint.x + 1, _startingPoint.y), _destinationPoint });
+                ((FoundSolution)_result).Value.Should().Equal(_startingPoint, new Point(_startingPoint.X + 1, _startingPoint.Y), _destinationPoint);
         }
 
         public class When_the_destination_point_is_on_the_other_side_of_a_wall : FindShortestPathSpecs
@@ -103,14 +105,14 @@ namespace Astar.Specs.PathFinder
             public override void Given()
             {
                 _startingPoint = _someStartingPoint;
-                _destinationPoint = (_startingPoint.x + 4, _startingPoint.y + 1);
+                _destinationPoint = new Point(_startingPoint.X + 4, _startingPoint.Y + 1);
                 var wall = new[]
                            {
-                               (_startingPoint.x + 2, _someStartingPoint.y - 2),
-                               (_startingPoint.x + 2, _someStartingPoint.y - 1),
-                               (_startingPoint.x + 2, _someStartingPoint.y),
-                               (_startingPoint.x + 2, _someStartingPoint.y + 1),
-                               (_startingPoint.x + 2, _someStartingPoint.y + 2)
+                               new Point(_startingPoint.X + 2, _someStartingPoint.Y - 2),
+                               new Point(_startingPoint.X + 2, _someStartingPoint.Y - 1),
+                               new Point(_startingPoint.X + 2, _someStartingPoint.Y),
+                               new Point(_startingPoint.X + 2, _someStartingPoint.Y + 1),
+                               new Point(_startingPoint.X + 2, _someStartingPoint.Y + 2)
                            };
                 _isWalkableFunc = point => !wall.Contains(point);
             }
@@ -125,12 +127,12 @@ namespace Astar.Specs.PathFinder
                     new[]
                     {
                         _startingPoint,
-                        (_startingPoint.x + 1, _startingPoint.y + 1),
-                        (_startingPoint.x + 1, _startingPoint.y + 2),
-                        (_startingPoint.x + 1, _startingPoint.y + 3),
-                        (_startingPoint.x + 2, _startingPoint.y + 3),
-                        (_startingPoint.x + 3, _startingPoint.y + 3),
-                        (_startingPoint.x + 4, _startingPoint.y + 2),
+                        new Point(_startingPoint.X + 1, _startingPoint.Y + 1),
+                        new Point(_startingPoint.X + 1, _startingPoint.Y + 2),
+                        new Point(_startingPoint.X + 1, _startingPoint.Y + 3),
+                        new Point(_startingPoint.X + 2, _startingPoint.Y + 3),
+                        new Point(_startingPoint.X + 3, _startingPoint.Y + 3),
+                        new Point(_startingPoint.X + 4, _startingPoint.Y + 2),
                         _destinationPoint
                     });
         }
@@ -138,14 +140,14 @@ namespace Astar.Specs.PathFinder
 
 
 
-        (int x, int y) _startingPoint;
-        (int x, int y) _destinationPoint;
-        Predicate<(int, int)> _isWalkableFunc;
+        Point _startingPoint;
+        Point _destinationPoint;
+        Predicate<Point> _isWalkableFunc;
         ISearchResult _result;
         Exception _exception;
 
-        static (int x, int y) _someStartingPoint = (10, 10);
-        static Predicate<(int, int)> _allIsWalkableFunc = node => true;
-        static Func<(int x, int y), (int x, int y), int> _anyEstimateHFunc = (sourcePoint, targetPoint) => ManhattanMethod.CalculateHeuristicCostFor(sourcePoint, targetPoint);
+        static Point _someStartingPoint = new Point(10, 10);
+        static Predicate<Point> _allIsWalkableFunc = node => true;
+        static Func<Point, Point, int> _anyEstimateHFunc = (sourcePoint, targetPoint) => ManhattanMethod.CalculateHeuristicCostFor(sourcePoint, targetPoint);
     }
 }

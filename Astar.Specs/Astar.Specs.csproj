@@ -58,12 +58,10 @@
     <Compile Include="FoundSolutionSpecs.cs" />
     <Compile Include="ManhattanMethodSpecs.cs" />
     <Compile Include="Node\CreateTheStartingNodeSpecs.cs" />
-    <Compile Include="PathFinder\FindTheCostOfAdjacentMoveSpecs.cs" />
     <Compile Include="Node\CreateNodeSpecs.cs" />
     <Compile Include="PathFinder\FindShortestPathSpecs.cs" />
     <Compile Include="PathFinder\GetAvailableAdjacentPointsSpecs.cs" />
-    <Compile Include="PathFinder\IsAvailableSpecs.cs" />
-    <Compile Include="Node\ObjectMother.cs" />
+    <Compile Include="ObjectMother.cs" />
     <Compile Include="Node\UpdateSpecs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

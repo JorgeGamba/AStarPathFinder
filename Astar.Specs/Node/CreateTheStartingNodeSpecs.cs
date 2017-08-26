@@ -1,14 +1,15 @@
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 using static Astar.Node;
 
 namespace Astar.Specs.Node
 {
+    [Category("Astar.Node.CreateNodeWith.CreateTheStartingNode")]
     public class CreateTheStartingNodeSpecs
     {
         public CreateTheStartingNodeSpecs()
         {
-            _point = (11, 11);
+            _point = new Point(11, 11);
             _result = CreateTheStartingNodeWith(_point);
         }
 
@@ -32,7 +33,7 @@ namespace Astar.Specs.Node
         public void Should_have_no_parent() =>
             _result.Parent.Should().BeNull();
 
-        (int x, int y) _point;
+        Point _point;
         Astar.Node _result;
     }
 }

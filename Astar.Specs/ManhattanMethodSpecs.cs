@@ -1,6 +1,6 @@
 ﻿using Doing.BDDExtensions;
-using NUnit.Framework;
 using FluentAssertions;
+using NUnit.Framework;
 using static Astar.ManhattanMethod;
 
 namespace Astar.Specs
@@ -23,7 +23,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_just_above_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x, _sourcePoint.y - 1);
+                _targetPoint = new Point(_sourcePoint.X, _sourcePoint.Y - 1);
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
@@ -33,7 +33,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_just_below_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x, _sourcePoint.y + 1);
+                _targetPoint = new Point(_sourcePoint.X, _sourcePoint.Y + 1);
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
@@ -43,7 +43,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_just_at_the_left_of_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x - 1, _sourcePoint.y);
+                _targetPoint = new Point(_sourcePoint.X - 1, _sourcePoint.Y);
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
@@ -53,7 +53,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_just_at_the_right_of_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x + 1, _sourcePoint.y);
+                _targetPoint = new Point(_sourcePoint.X + 1, _sourcePoint.Y);
 
             [Test]
             public void Should_calculate_a_cost_of_10() =>
@@ -63,7 +63,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_in_the_top_left_of_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x - 1, _sourcePoint.y - 1);
+                _targetPoint = new Point(_sourcePoint.X - 1, _sourcePoint.Y - 1);
 
             [Test]
             public void Should_calculate_a_cost_of_20() =>
@@ -73,7 +73,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_in_the_top_right_of_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x + 1, _sourcePoint.y - 1);
+                _targetPoint = new Point(_sourcePoint.X + 1, _sourcePoint.Y - 1);
 
             [Test]
             public void Should_calculate_a_cost_of_20() =>
@@ -83,7 +83,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_in_the_bottom_left_of_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x - 1, _sourcePoint.y + 1);
+                _targetPoint = new Point(_sourcePoint.X - 1, _sourcePoint.Y + 1);
 
             [Test]
             public void Should_calculate_a_cost_of_20() =>
@@ -93,7 +93,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_in_the_bottom_right_of_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x + 1, _sourcePoint.y + 1);
+                _targetPoint = new Point(_sourcePoint.X + 1, _sourcePoint.Y + 1);
 
             [Test]
             public void Should_calculate_a_cost_of_20() =>
@@ -103,7 +103,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_far_in_the_same_horizontal_line_of_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x, _sourcePoint.y + 100);
+                _targetPoint = new Point(_sourcePoint.X, _sourcePoint.Y + 100);
 
             [Test]
             public void Should_calculate_a_cost_of_points_straight_towards_the_target_by_10() =>
@@ -113,7 +113,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_far_in_a_perfect_diagonal_line_from_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x + 100, _sourcePoint.y + 100);
+                _targetPoint = new Point(_sourcePoint.X + 100, _sourcePoint.Y + 100);
 
             [Test]
             public void Should_calculate_a_cost_of_the_double_of_the_diagonal_points_straight_towards_the_target_by_10() =>
@@ -123,7 +123,7 @@ namespace Astar.Specs
         public class When_the_target_point_is_far_in_an_irregular_direction_from_the_source_point : ManhattanMethodSpecs
         {
             public override void Given() =>
-                _targetPoint = (_sourcePoint.x + 5, _sourcePoint.y + 3);
+                _targetPoint = new Point(_sourcePoint.X + 5, _sourcePoint.Y + 3);
 
             [Test]
             public void Should_calculate_the_expected_cost() =>
@@ -131,9 +131,9 @@ namespace Astar.Specs
         }
 
 
-        (int x, int y) _targetPoint;
+        Point _targetPoint;
         int _result;
 
-        static (int x, int y) _sourcePoint = (10, 10);
+        static Point _sourcePoint = new Point(10, 10);
     }
 }

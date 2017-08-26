@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Astar
+﻿namespace Astar
 {
     public class Node
     {
-        private Node((int, int) point, int g, int h, int f, Node parent)
+        private Node(Point point, int g, int h, int f, Node parent)
         {
             Point = point;
             G = g;
@@ -13,7 +11,7 @@ namespace Astar
             Parent = parent;
         }
 
-        public (int x, int y) Point { get; }
+        public Point Point { get; }
 
         public int G { get; private set; }
 
@@ -37,15 +35,15 @@ namespace Astar
         }
 
 
-        public static Node CreateNodeWith(Node parent, (int x, int y, int fromParentMoveCost) point, int h)
+        public static Node CreateNodeWith(Node parent, (Point Point, int FromParentMoveCost) adjacentPoint, int h)
         {
-            var g = parent.G + point.fromParentMoveCost;
+            var g = parent.G + adjacentPoint.FromParentMoveCost;
             var f = g + h;
 
-            return new Node((point.x, point.y), g, h, f, parent);
+            return new Node(adjacentPoint.Point, g, h, f, parent);
         }
 
-        public static Node CreateTheStartingNodeWith((int x, int y) point) => 
+        public static Node CreateTheStartingNodeWith(Point point) => 
             new Node(point, 0, 0, 0, null);
     }
 }
